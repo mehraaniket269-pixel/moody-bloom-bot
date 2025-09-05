@@ -19,31 +19,31 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
   }, [growth, mood]);
 
   // Calculate plant characteristics based on growth and mood
-  const stemHeight = Math.max(20, (growth / 100) * 120);
-  const leafCount = Math.floor(growth / 15) + 2;
-  const flowerCount = growth > 60 ? Math.floor((growth - 60) / 20) + 1 : 0;
+  const stemHeight = Math.max(15, (growth / 100) * 35);
+  const leafCount = Math.max(2, Math.floor(growth / 20) + 1);
+  const flowerCount = growth > 70 ? Math.floor((growth - 60) / 25) + 1 : 0;
   
   const moodColors = {
     sad: { 
-      stem: "#8B7355", 
-      leaves: "#7F9B6B", 
-      pot: "#A0522D",
-      soil: "#8B6F47",
+      stem: "#6B4423", 
+      leaves: "#7A8471", 
+      pot: "#8B4513",
+      soil: "#654321",
       accent: "#9CAF88"
     },
     neutral: { 
-      stem: "#6B8E23", 
-      leaves: "#90EE90", 
+      stem: "#5D4E37", 
+      leaves: "#228B22", 
       pot: "#CD853F",
       soil: "#8B7355",
-      accent: "#ADDD8E"
+      accent: "#90EE90"
     },
     happy: { 
-      stem: "#228B22", 
+      stem: "#4A5D23", 
       leaves: "#32CD32", 
       pot: "#DAA520",
       soil: "#8B7355",
-      accent: "#90EE90"
+      accent: "#ADFF2F"
     }
   };
 
@@ -52,13 +52,13 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
   const generateLeaves = () => {
     const leaves = [];
     for (let i = 0; i < leafCount; i++) {
-      const levelHeight = (i + 1) * (stemHeight / (leafCount + 1));
+      const levelHeight = (i + 1) * (stemHeight / (leafCount + 2));
       const side = i % 2 === 0 ? -1 : 1;
       const baseX = 50;
-      const leafX = baseX + side * (15 + Math.sin(i) * 5);
-      const leafY = 85 - levelHeight + Math.cos(i) * 3;
-      const leafSize = 8 + (growth / 100) * 6 + streak * 0.5;
-      const rotation = side * (30 + Math.sin(i * 2) * 15);
+      const leafX = baseX + side * (8 + Math.sin(i * 0.5) * 2);
+      const leafY = 83 - levelHeight;
+      const leafSize = 4 + (growth / 100) * 3 + streak * 0.3;
+      const rotation = side * (20 + Math.sin(i * 1.5) * 10);
       
       // Main leaf
       leaves.push(
@@ -67,7 +67,7 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
             cx={leafX}
             cy={leafY}
             rx={leafSize}
-            ry={leafSize * 1.5}
+            ry={leafSize * 1.8}
             fill={colors.leaves}
             transform={`rotate(${rotation} ${leafX} ${leafY})`}
             className="drop-shadow-sm transition-all duration-500"
@@ -78,13 +78,23 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
           {/* Leaf vein */}
           <line
             x1={leafX}
-            y1={leafY - leafSize}
+            y1={leafY - leafSize * 1.2}
             x2={leafX}
-            y2={leafY + leafSize}
+            y2={leafY + leafSize * 1.2}
             stroke={colors.stem}
-            strokeWidth={0.5}
+            strokeWidth={0.3}
             transform={`rotate(${rotation} ${leafX} ${leafY})`}
-            opacity={0.6}
+            opacity={0.7}
+          />
+          {/* Leaf connection to stem */}
+          <line
+            x1={50}
+            y1={leafY}
+            x2={leafX - side * 2}
+            y2={leafY}
+            stroke={colors.stem}
+            strokeWidth={1}
+            opacity={0.8}
           />
         </g>
       );
@@ -97,8 +107,8 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
     
     const flowers = [];
     for (let i = 0; i < flowerCount; i++) {
-      const flowerX = 50 + (i % 2 === 0 ? -8 : 8) + Math.sin(i) * 3;
-      const flowerY = 25 + i * 8;
+      const flowerX = 50 + (i % 2 === 0 ? -3 : 3);
+      const flowerY = 55 - stemHeight + i * 5;
       
       flowers.push(
         <g key={`flower-${i}`} className={isHovered ? "animate-pulse" : ""}>
@@ -106,17 +116,17 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
           {[0, 72, 144, 216, 288].map((angle, petal) => (
             <ellipse
               key={petal}
-              cx={flowerX + Math.cos((angle * Math.PI) / 180) * 3}
-              cy={flowerY + Math.sin((angle * Math.PI) / 180) * 3}
-              rx={2.5}
-              ry={4}
+              cx={flowerX + Math.cos((angle * Math.PI) / 180) * 1.5}
+              cy={flowerY + Math.sin((angle * Math.PI) / 180) * 1.5}
+              rx={1.5}
+              ry={2.5}
               fill="#FFB6C1"
               transform={`rotate(${angle} ${flowerX} ${flowerY})`}
               className="drop-shadow-sm"
             />
           ))}
           {/* Flower center */}
-          <circle cx={flowerX} cy={flowerY} r={2} fill="#FFD700" className="drop-shadow-sm" />
+          <circle cx={flowerX} cy={flowerY} r={1} fill="#FFD700" className="drop-shadow-sm" />
         </g>
       );
     }
@@ -154,18 +164,18 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
         }}
       >
         <svg 
-          width="280" 
+          width="300" 
           height="320" 
-          viewBox="0 0 100 100" 
+          viewBox="0 0 100 90" 
           className="drop-shadow-xl"
         >
           {/* Background glow */}
           <circle
             cx={50}
-            cy={50}
-            r={40}
+            cy={45}
+            r={35}
             fill="url(#plantGlow)"
-            opacity={isHovered ? 0.2 : 0.1}
+            opacity={isHovered ? 0.15 : 0.08}
             className="transition-opacity duration-500"
           />
           
@@ -187,31 +197,32 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
           </defs>
           
           {/* Underground roots */}
-          <g opacity={isHovered ? 0.6 : 0}>
+          <g opacity={isHovered ? 0.4 : 0}>
             {generateRoots()}
           </g>
           
           {/* Soil surface */}
-          <ellipse cx={50} cy={85} rx={20} ry={2} fill="url(#soilGradient)" />
+          <ellipse cx={50} cy={83} rx={16} ry={1.5} fill="url(#soilGradient)" />
           
           {/* Pot with realistic shading */}
           <path
-            d="M 30 85 Q 30 94 50 94 Q 70 94 70 85 L 67 73 L 33 73 Z"
+            d="M 34 83 Q 34 88 50 88 Q 66 88 66 83 L 64 75 L 36 75 Z"
             fill="url(#potGradient)"
             className="drop-shadow-lg"
           />
           {/* Pot rim */}
-          <ellipse cx={50} cy={73} rx={18.5} ry={2.5} fill={colors.pot} />
+          <ellipse cx={50} cy={75} rx={15} ry={2} fill={colors.pot} />
           {/* Pot highlight */}
-          <ellipse cx={45} cy={79} rx={3} ry={8} fill="rgba(255,255,255,0.1)" />
+          <ellipse cx={47} cy={79} rx={2} ry={5} fill="rgba(255,255,255,0.15)" />
           
           {/* Main stem with natural curve */}
           <path
-            d={`M 50 85 Q ${48 + Math.sin(growth * 0.1) * 2} ${85 - stemHeight * 0.3} Q ${52 + Math.sin(growth * 0.15) * 1.5} ${85 - stemHeight * 0.7} 50 ${85 - stemHeight}`}
+            d={`M 50 83 Q ${49 + Math.sin(growth * 0.1)} ${83 - stemHeight * 0.4} Q ${51 + Math.sin(growth * 0.15) * 0.8} ${83 - stemHeight * 0.8} 50 ${83 - stemHeight}`}
             stroke={colors.stem}
-            strokeWidth={3 + (growth / 100) * 2}
+            strokeWidth={2.5 + (growth / 100) * 1}
             fill="none"
             className="drop-shadow-sm"
+            strokeLinecap="round"
           />
           
           {/* Leaves */}
@@ -223,8 +234,8 @@ export const PlantVisualization = ({ growth, mood, streak, className }: PlantVis
           {/* Small details - dewdrops if happy */}
           {mood === 'happy' && (
             <g className={isHovered ? "animate-pulse" : ""}>
-              <circle cx={58} cy={65} r={0.8} fill="rgba(135,206,235,0.8)" className="animate-pulse" />
-              <circle cx={42} cy={55} r={0.6} fill="rgba(135,206,235,0.8)" className="animate-pulse" />
+              <circle cx={55} cy={70} r={0.6} fill="rgba(135,206,235,0.8)" className="animate-pulse" />
+              <circle cx={45} cy={65} r={0.4} fill="rgba(135,206,235,0.8)" className="animate-pulse" />
             </g>
           )}
         </svg>
