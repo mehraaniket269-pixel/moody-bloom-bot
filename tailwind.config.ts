@@ -61,7 +61,29 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				plant: {
+					healthy: 'hsl(var(--plant-healthy))',
+					growing: 'hsl(var(--plant-growing))',
+					sad: 'hsl(var(--plant-sad))',
+					neutral: 'hsl(var(--plant-neutral))',
+					happy: 'hsl(var(--plant-happy))'
+				},
+				growth: {
+					low: 'hsl(var(--growth-low))',
+					medium: 'hsl(var(--growth-medium))',
+					high: 'hsl(var(--growth-high))'
+				},
+				chat: {
+					bg: 'hsl(var(--chat-bg))',
+					bubble: 'hsl(var(--chat-bubble))',
+					user: 'hsl(var(--chat-user))'
 				}
+			},
+			backgroundImage: {
+				'gradient-growth': 'var(--gradient-growth)',
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-primary': 'var(--gradient-primary)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
