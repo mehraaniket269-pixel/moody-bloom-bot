@@ -8,69 +8,70 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Plant Companion Design System - Nature & Growth Theme */
-    --background: 125 20% 8%;
-    --foreground: 120 40% 95%;
+    /* Light Plant Companion Theme - Nature & Growth */
+    --background: 150 30% 92%;
+    --foreground: 140 50% 15%;
 
-    --card: 125 25% 12%;
-    --card-foreground: 120 40% 95%;
+    --card: 150 25% 95%;
+    --card-foreground: 140 50% 15%;
 
-    --popover: 125 25% 12%;
-    --popover-foreground: 120 40% 95%;
+    --popover: 150 25% 95%;
+    --popover-foreground: 140 50% 15%;
 
     /* Primary - Vibrant plant green */
-    --primary: 110 50% 55%;
-    --primary-foreground: 125 20% 8%;
+    --primary: 140 60% 45%;
+    --primary-foreground: 150 25% 95%;
 
-    /* Secondary - Softer green */
-    --secondary: 125 30% 20%;
-    --secondary-foreground: 120 40% 95%;
+    /* Secondary - Light nature green */
+    --secondary: 150 20% 85%;
+    --secondary-foreground: 140 50% 25%;
 
-    --muted: 125 25% 15%;
-    --muted-foreground: 120 20% 70%;
+    --muted: 150 15% 88%;
+    --muted-foreground: 140 25% 55%;
 
-    --accent: 110 60% 45%;
-    --accent-foreground: 125 20% 8%;
+    --accent: 120 40% 60%;
+    --accent-foreground: 150 25% 95%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 150 25% 95%;
 
-    --border: 125 20% 25%;
-    --input: 125 25% 18%;
-    --ring: 110 50% 55%;
+    --border: 150 20% 80%;
+    --input: 150 15% 90%;
+    --ring: 140 60% 45%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Plant-specific colors */
-    --plant-healthy: 110 60% 45%;
-    --plant-growing: 100 50% 50%;
-    --plant-sad: 60 30% 40%;
-    --plant-neutral: 90 40% 45%;
-    --plant-happy: 110 70% 50%;
+    /* Plant-specific colors - Natural light theme */
+    --plant-healthy: 120 50% 40%;
+    --plant-growing: 100 45% 45%;
+    --plant-sad: 60 25% 50%;
+    --plant-neutral: 90 35% 50%;
+    --plant-happy: 110 60% 35%;
     
-    /* Growth colors */
-    --growth-low: 60 30% 40%;
-    --growth-medium: 90 40% 45%;
-    --growth-high: 110 60% 45%;
+    /* Growth colors - Light natural tones */
+    --growth-low: 60 25% 50%;
+    --growth-medium: 90 35% 50%;
+    --growth-high: 120 50% 40%;
     
-    /* Chat colors */
-    --chat-bg: 125 30% 15%;
-    --chat-bubble: 125 35% 18%;
-    --chat-user: 110 40% 25%;
+    /* Chat colors - Light and friendly */
+    --chat-bg: 150 20% 93%;
+    --chat-bubble: 150 15% 88%;
+    --chat-user: 140 30% 80%;
     
-    /* Gradients */
+    /* Light gradients */
     --gradient-growth: linear-gradient(135deg, hsl(var(--plant-growing)), hsl(var(--plant-healthy)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(125 30% 10%));
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(110 60% 60%));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(150 30% 90%));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(120 50% 50%));
+    --gradient-background: linear-gradient(135deg, hsl(150 40% 85%), hsl(140 30% 88%));
 
-    --sidebar-background: 125 25% 12%;
-    --sidebar-foreground: 120 40% 95%;
-    --sidebar-primary: 110 50% 55%;
-    --sidebar-primary-foreground: 125 20% 8%;
-    --sidebar-accent: 125 30% 18%;
-    --sidebar-accent-foreground: 120 40% 95%;
-    --sidebar-border: 125 20% 25%;
-    --sidebar-ring: 110 50% 55%;
+    --sidebar-background: 150 25% 95%;
+    --sidebar-foreground: 140 50% 15%;
+    --sidebar-primary: 140 60% 45%;
+    --sidebar-primary-foreground: 150 25% 95%;
+    --sidebar-accent: 150 20% 85%;
+    --sidebar-accent-foreground: 140 50% 25%;
+    --sidebar-border: 150 20% 80%;
+    --sidebar-ring: 140 60% 45%;
   }
 
   .dark {

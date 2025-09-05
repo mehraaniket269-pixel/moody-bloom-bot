@@ -34,7 +34,7 @@ export const MoodTracker = ({
 
   const moodDescriptions = {
     sad: "A bit down, but growing...",
-    neutral: "Feeling balanced today",
+    neutral: "Curious about you! 🌱", 
     happy: "Thriving and flourishing!"
   };
 
