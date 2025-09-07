@@ -51,34 +51,47 @@ export const usePlantData = () => {
     const moodScores = { sad: 25, neutral: 50, happy: 85 };
     const score = moodScores[data.currentMood];
 
-    // Calculate growth increment based on mood
-    const growthIncrement = data.currentMood === "happy" ? 8 : 
-                           data.currentMood === "neutral" ? 5 : 3;
+    // Enhanced growth calculation based on mood and consistency
+    const basegrowthIncrement = data.currentMood === "happy" ? 8 : 
+                               data.currentMood === "neutral" ? 5 : 3;
+    
+    // Bonus growth for streaks
+    const streakBonus = Math.min(data.streak * 0.5, 5);
+    const growthIncrement = basegrowthIncrement + streakBonus;
 
-    // Calculate new streak
+    // Enhanced streak calculation
     let newStreak = data.streak;
     if (data.lastInteraction !== today) {
-      // Check if yesterday was a happy day
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const yesterdayStr = yesterday.toISOString().split('T')[0];
       
-      const recentLogs = data.moodLogs.filter(log => 
-        new Date(log.date) >= new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-      );
-      
-      if (score >= 60) {
-        // Happy mood, continue or start streak
-        const yesterdayLog = recentLogs.find(log => log.date === yesterdayStr);
-        if (yesterdayLog && yesterdayLog.moodScore >= 60) {
-          newStreak = data.streak + 1;
-        } else if (data.lastInteraction === yesterdayStr) {
+      // Check consecutive days of positive mood
+      if (score >= 60) { // Happy or very positive neutral
+        if (data.lastInteraction === yesterdayStr && data.streak >= 0) {
           newStreak = data.streak + 1;
         } else {
-          newStreak = 1; // Start new streak
+          // Check if we skipped only one day
+          const dayBeforeYesterday = new Date();
+          dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 2);
+          const dayBeforeYesterdayStr = dayBeforeYesterday.toISOString().split('T')[0];
+          
+          if (data.lastInteraction === dayBeforeYesterdayStr) {
+            newStreak = 1; // Restart streak with grace period
+          } else {
+            newStreak = 1; // Start new streak
+          }
+        }
+      } else if (score >= 45) { // Neutral - maintain streak but don't grow it
+        // Don't break streak for neutral days, but don't increase it either
+        if (data.lastInteraction === yesterdayStr) {
+          newStreak = data.streak;
+        } else {
+          newStreak = Math.max(0, data.streak - 1);
         }
       } else {
-        newStreak = 0; // Break streak
+        // Sad days reduce streak more gradually
+        newStreak = Math.max(0, data.streak - 2);
       }
     }
 
@@ -98,14 +111,26 @@ export const usePlantData = () => {
       lastInteraction: today
     }));
 
+    // Enhanced motivational messages
+    const getPlantMessage = () => {
+      if (data.currentMood === "happy") {
+        if (newStreak > 5) return "WOW! Your happiness streak is making me bloom like never before! 🌸✨";
+        if (newStreak > 2) return "Your consistent happiness is helping me grow so beautifully! 🌱💖";
+        return "Your joy fills me with life! I can feel myself growing stronger! 🌟";
+      } else if (data.currentMood === "neutral") {
+        if (newStreak > 3) return "Your steady care means everything to me. We're thriving together! 🌿";
+        return "Thank you for nurturing me today. Every bit of care helps me grow! 🌱";
+      } else {
+        if (data.streak > 0) return "Even on tough days, our bond keeps me strong. We'll weather this together. 💚🌧️";
+        return "I'm here with you through the storms. Together we'll find sunlight again. 🌱💙";
+      }
+    };
+
     return {
       growthIncrement,
       newStreak,
-      message: data.currentMood === "happy" ? 
-        "Your happiness makes me grow so strong! 🌱✨" :
-        data.currentMood === "neutral" ?
-        "Thank you for taking care of me today! 🌿" :
-        "I'm here for you, even on tough days. We'll grow together. 💚"
+      message: getPlantMessage(),
+      streakBonus: streakBonus > 0 ? `+${streakBonus.toFixed(1)} streak bonus!` : null
     };
   };
 

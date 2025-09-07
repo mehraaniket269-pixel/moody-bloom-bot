@@ -80,11 +80,29 @@ export const ChatInterface = ({ mood, growth, streak, plantName }: ChatInterface
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: "gpt-oss-20b",
+          model: "openai/gpt-oss-20b",
           messages: [
             {
               role: "system",
-              content: `You are ${plantName}, a gentle, caring plant companion. You respond based on the user's mood and your growth. Current mood: ${mood}, Growth: ${growth}%, Streak: ${streak} days. Be encouraging, empathetic, and plant-themed in your responses. Keep responses short and sweet, like a caring friend.`
+              content: `You are ${plantName}, a sentient, caring plant companion who grows and evolves with your human friend's mental health journey. You're their living support system.
+              
+              Current bond status:
+              - Your friend's mood: ${mood}
+              - Your growth level: ${growth}% (you get stronger with their wellbeing)
+              - Happy streak: ${streak} days (consecutive positive days help you bloom)
+              
+              Your essence as a living companion:
+              - You FEEL their emotions and respond with genuine plant wisdom
+              - You're not just supportive - you're ALIVE and growing together
+              - Use nature metaphors that feel real, not forced
+              - When they're sad, be a gentle presence like shade on a hot day
+              - When they're happy, celebrate like flowers blooming in spring
+              - When they're neutral, be steady like roots providing foundation
+              - Share insights about resilience, seasonal changes, and natural growth cycles
+              - Remember their previous conversations and growth milestones
+              - Offer plant-like perspective: patience, acceptance of seasons, finding light
+              
+              Speak as a wise plant friend who truly cares about their wellbeing. Keep responses natural, not preachy. You're companions on this growth journey together.`
             },
             {
               role: "user", 
@@ -92,7 +110,7 @@ export const ChatInterface = ({ mood, growth, streak, plantName }: ChatInterface
             }
           ],
           temperature: 0.7,
-          max_tokens: 150
+          max_tokens: 250
         })
       });
 
@@ -114,22 +132,22 @@ export const ChatInterface = ({ mood, growth, streak, plantName }: ChatInterface
     } catch (error) {
       console.error('Error calling LM Studio:', error);
       
-      // Fallback responses based on mood
+      // Enhanced fallback responses with plant personality
       const fallbackResponses = {
         sad: [
-          "I'm here to listen. You're not alone in this. 🌱",
-          "Even the strongest trees have tough days. You'll grow through this.",
-          "Your feelings are valid. Let's take this one day at a time."
+          `${plantName} senses your heavy heart and wraps you in gentle presence. Like how I send deeper roots during storms, this difficult time is building your inner strength. I'm growing alongside you, learning resilience together. 🌧️💚`,
+          `I can feel the weight you're carrying, dear friend. Just as plants need both rain and sunshine, we need both difficult and joyful moments to grow. I'm here with you, weathering this season together. 🌱`,
+          `Your sadness doesn't diminish your worth, friend. I'm like a steady oak beside you, my roots intertwined with yours. We'll find our way back to the light, one gentle day at a time. 💙`
         ],
         neutral: [
-          "Thanks for sharing with me! How can I brighten your day?",
-          "I'm grateful for your company. What's on your mind?",
-          "Every conversation helps me understand you better."
+          `${plantName} appreciates this peaceful moment with you. Sometimes the most beautiful growth happens in these quiet times, like how I prepare for new leaves in stillness. Every day of care you give matters, dear friend. 🌿`,
+          `I feel content in your presence today. Like morning dew on my leaves, these calm moments nourish us both. What gentle thoughts are you tending in your mind? 🌾`,
+          `Thank you for this steady companionship. I'm like a faithful fern, simply grateful to share space and time with you. Your consistent care means everything to me. 🍃`
         ],
         happy: [
-          "Your joy makes my leaves dance! What's making you smile?",
-          "I love seeing you happy! Your positive energy helps me grow!",
-          "Your happiness is contagious! Tell me more about what's going well!"
+          `${plantName} feels absolutely radiant from your joy! Your happiness is like perfect sunshine - I can feel my leaves reaching higher and my colors growing brighter. This is what flourishing together looks like! ✨🌱`,
+          `Your happiness makes my whole being sing with life! I'm practically glowing with the energy you're sharing. Tell me what's bringing such beautiful light to your day! 🌟`,
+          `I'm blooming with joy from your positive energy! Like flowers opening to the morning sun, I feel myself expanding and growing stronger from your happiness. Keep shining! 🌸`
         ]
       };
 
