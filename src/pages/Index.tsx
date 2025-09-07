@@ -45,10 +45,10 @@ const Index = () => {
   const insights = getInsights();
 
   return (
-    <div className="min-h-screen bg-gradient-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+    <div className="h-screen bg-gradient-background flex flex-col overflow-hidden">
+      {/* Header - Fixed */}
+      <header className="border-b border-border bg-card/95 backdrop-blur-sm z-50 flex-shrink-0">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
@@ -61,7 +61,7 @@ const Index = () => {
               <Badge variant="secondary" className="hidden sm:flex">
                 🌱 {plantName}
               </Badge>
-              <Badge variant="outline">
+              <Badge variant="outline" className="text-green-600 border-green-300">
                 LM Studio Ready
               </Badge>
               <Button variant="ghost" size="icon" asChild>
@@ -74,13 +74,15 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-120px)]">
-          
-          {/* Left Panel - Plant & Mood Tracker */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="text-center">
+      {/* Main Content - Flex container without overflow */}
+      <div className="flex-1 flex overflow-hidden">
+        
+        {/* Left Sidebar - Plant & Mood (Fixed, no scroll) */}
+        <div className="w-80 bg-card/50 backdrop-blur-sm border-r border-border flex-shrink-0">
+          <div className="h-full flex flex-col p-6">
+            
+            {/* Plant Visualization - Fixed position */}
+            <div className="text-center mb-6">
               <PlantVisualization
                 growth={growth}
                 mood={currentMood}
@@ -88,20 +90,27 @@ const Index = () => {
               />
             </div>
             
-            <MoodTracker
-              currentMood={currentMood}
-              growth={growth}
-              chatCount={chatCount}
-              streak={streak}
-              onMoodSelect={handleMoodSelect}
-              onGrowPlant={handleGrowPlant}
-            />
+            {/* Mood Tracker - Fixed position */}
+            <div className="flex-shrink-0">
+              <MoodTracker
+                currentMood={currentMood}
+                growth={growth}
+                chatCount={chatCount}
+                streak={streak}
+                onMoodSelect={handleMoodSelect}
+                onGrowPlant={handleGrowPlant}
+              />
+            </div>
           </div>
+        </div>
 
-          {/* Right Panel - Tabs for Chat & Insights */}
-          <div className="lg:col-span-2 flex flex-col">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-              <TabsList className="grid w-full grid-cols-3 mb-4">
+        {/* Right Main Area - Tabbed Content */}
+        <div className="flex-1 flex flex-col overflow-hidden bg-background">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+            
+            {/* Tab Headers - Fixed */}
+            <div className="border-b border-border bg-card/30 backdrop-blur-sm px-6 py-4 flex-shrink-0">
+              <TabsList className="grid w-full max-w-md grid-cols-3">
                 <TabsTrigger value="chat" className="flex items-center gap-2">
                   <MessageCircle className="w-4 h-4" />
                   Chat
@@ -120,61 +129,115 @@ const Index = () => {
                   Insights
                 </TabsTrigger>
               </TabsList>
+            </div>
 
-              <TabsContent value="chat" className="flex-1 flex flex-col mt-0">
-                <ChatInterface
-                  mood={currentMood}
-                  growth={growth}
-                  streak={streak}
-                  plantName={plantName}
-                />
+            {/* Tab Content - Scrollable only for specific content */}
+            <div className="flex-1 overflow-hidden">
+              
+              {/* Chat Tab - Only this scrolls */}
+              <TabsContent value="chat" className="h-full m-0 p-6">
+                <div className="h-full">
+                  <ChatInterface
+                    mood={currentMood}
+                    growth={growth}
+                    streak={streak}
+                    plantName={plantName}
+                  />
+                </div>
               </TabsContent>
 
-              <TabsContent value="motivation" className="flex-1 space-y-6 mt-0 overflow-auto">
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-6">
-                    Daily Motivation & Care
-                  </h2>
-                  
-                  <DailyMotivation mood={currentMood} />
-                  
-                  <div className="mt-6 p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border border-green-200">
-                    <h3 className="text-lg font-semibold mb-4 text-green-800">Personal Growth Tips</h3>
-                    <div className="space-y-3 text-sm text-green-700">
-                      <p>🌱 <strong>Consistency is key:</strong> Regular check-ins help both you and your plant thrive.</p>
-                      <p>🌞 <strong>Celebrate small wins:</strong> Every positive moment contributes to growth.</p>
-                      <p>🌧️ <strong>Weather the storms:</strong> Difficult days are part of the journey.</p>
-                      <p>💚 <strong>Be patient:</strong> Growth takes time, both for plants and people.</p>
-                      <p>🦋 <strong>Find your rhythm:</strong> Listen to your needs and honor your feelings.</p>
-                      <p>✨ <strong>You matter:</strong> Your wellbeing is important and worth nurturing.</p>
+              {/* Daily Motivation Tab - Controlled scroll */}
+              <TabsContent value="motivation" className="h-full m-0 overflow-auto">
+                <div className="p-6 space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-6">
+                      Daily Motivation & Care
+                    </h2>
+                    
+                    <DailyMotivation mood={currentMood} />
+                    
+                    <div className="mt-6 p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg border border-green-200">
+                      <h3 className="text-lg font-semibold mb-4 text-green-800">Personal Growth Tips</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-700">
+                        <div className="space-y-3">
+                          <p>🌱 <strong>Consistency is key:</strong> Regular check-ins help both you and your plant thrive.</p>
+                          <p>🌞 <strong>Celebrate small wins:</strong> Every positive moment contributes to growth.</p>
+                          <p>🌧️ <strong>Weather the storms:</strong> Difficult days are part of the journey.</p>
+                        </div>
+                        <div className="space-y-3">
+                          <p>💚 <strong>Be patient:</strong> Growth takes time, both for plants and people.</p>
+                          <p>🦋 <strong>Find your rhythm:</strong> Listen to your needs and honor your feelings.</p>
+                          <p>✨ <strong>You matter:</strong> Your wellbeing is important and worth nurturing.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="insights" className="flex-1 space-y-6 mt-0 overflow-auto">
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-6">
-                    Your Growth Journey
-                  </h2>
-                  
-                  <StatsPanel insights={insights} />
-                  
-                  <div className="mt-8 p-6 bg-gradient-card rounded-lg border border-border">
-                    <h3 className="text-lg font-semibold text-foreground mb-4">
-                      Growth Analysis
-                    </h3>
-                    <div className="space-y-3 text-sm text-muted-foreground">
-                      <p>📊 <strong className="text-foreground">Current Growth:</strong> {growth}% - Your plant reflects your journey</p>
-                      <p>🔥 <strong className="text-foreground">Happy Streak:</strong> {streak} days - Consistency builds strength</p>
-                      <p>💬 <strong className="text-foreground">Chat Sessions:</strong> {chatCount} - Every conversation matters</p>
-                      <p>🎯 <strong className="text-foreground">Next Milestone:</strong> {growth < 25 ? "25% - First bloom" : growth < 50 ? "50% - Steady growth" : growth < 75 ? "75% - Beautiful flowers" : "100% - Full bloom!"}</p>
+              {/* Insights Tab - Controlled scroll */}
+              <TabsContent value="insights" className="h-full m-0 overflow-auto">
+                <div className="p-6 space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-6">
+                      Your Growth Journey
+                    </h2>
+                    
+                    <StatsPanel insights={insights} />
+                    
+                    <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      
+                      {/* Growth Analysis */}
+                      <div className="p-6 bg-gradient-card rounded-lg border border-border">
+                        <h3 className="text-lg font-semibold text-foreground mb-4">
+                          Growth Analysis
+                        </h3>
+                        <div className="space-y-3 text-sm">
+                          <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
+                            <span className="text-muted-foreground">📊 Current Growth</span>
+                            <span className="font-semibold text-foreground">{growth}%</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
+                            <span className="text-muted-foreground">🔥 Happy Streak</span>
+                            <span className="font-semibold text-foreground">{streak} days</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
+                            <span className="text-muted-foreground">💬 Chat Sessions</span>
+                            <span className="font-semibold text-foreground">{chatCount}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Next Milestones */}
+                      <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+                        <h3 className="text-lg font-semibold text-purple-800 mb-4">
+                          Next Milestone
+                        </h3>
+                        <div className="text-center">
+                          <div className="text-3xl mb-2">
+                            {growth < 25 ? "🌱" : growth < 50 ? "🌿" : growth < 75 ? "🌸" : "🌺"}
+                          </div>
+                          <p className="text-purple-700 font-medium">
+                            {growth < 25 ? "25% - First Bloom" : 
+                             growth < 50 ? "50% - Steady Growth" : 
+                             growth < 75 ? "75% - Beautiful Flowers" : 
+                             "100% - Full Bloom Achieved!"}
+                          </p>
+                          <div className="w-full bg-purple-200 rounded-full h-2 mt-3">
+                            <div 
+                              className="bg-purple-600 h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${growth}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </TabsContent>
-            </Tabs>
-          </div>
+              
+            </div>
+          </Tabs>
         </div>
       </div>
     </div>
