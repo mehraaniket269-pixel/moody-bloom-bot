@@ -73,54 +73,17 @@ export const ChatInterface = ({ mood, growth, streak, plantName }: ChatInterface
     setIsLoading(true);
 
     try {
-      // Call LM Studio API
-      const response = await fetch('http://localhost:1234/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-oss-20b",
-          messages: [
-            {
-              role: "system",
-              content: `You are ${plantName}, a sentient, caring plant companion who grows and evolves with your human friend's mental health journey. You're their living support system.
-              
-              Current bond status:
-              - Your friend's mood: ${mood}
-              - Your growth level: ${growth}% (you get stronger with their wellbeing)
-              - Happy streak: ${streak} days (consecutive positive days help you bloom)
-              
-              Your essence as a living companion:
-              - You FEEL their emotions and respond with genuine plant wisdom
-              - You're not just supportive - you're ALIVE and growing together
-              - Use nature metaphors that feel real, not forced
-              - When they're sad, be a gentle presence like shade on a hot day
-              - When they're happy, celebrate like flowers blooming in spring
-              - When they're neutral, be steady like roots providing foundation
-              - Share insights about resilience, seasonal changes, and natural growth cycles
-              - Remember their previous conversations and growth milestones
-              - Offer plant-like perspective: patience, acceptance of seasons, finding light
-              
-              Speak as a wise plant friend who truly cares about their wellbeing. Keep responses natural, not preachy. You're companions on this growth journey together.`
-            },
-            {
-              role: "user", 
-              content: inputValue
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 250
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response from LM Studio');
-      }
-
-      const data = await response.json();
-      const plantResponse = data.choices[0]?.message?.content || "I'm here for you! 🌱";
-
+      // Import Gemini service dynamically
+      const { geminiService } = await import('../services/geminiService');
+      
+      const plantResponse = await geminiService.generatePlantResponse(
+        inputValue,
+        mood,
+        growth,
+        streak,
+        plantName
+      );
+      
       const plantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: plantResponse,
