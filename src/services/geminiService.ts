@@ -1,13 +1,27 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { cloudConfig, validateCloudConfig } from '../config/cloudConfig';
 
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || 'your-api-key-here');
+// Initialize Gemini AI with cloud configuration
+const genAI = new GoogleGenerativeAI(cloudConfig.gemini.apiKey || 'demo-key');
+
+// Validate configuration on service initialization
+const isConfigValid = validateCloudConfig();
 
 export class GeminiService {
   private model;
 
   constructor() {
-    this.model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    this.model = genAI.getGenerativeModel({ 
+      model: cloudConfig.gemini.model,
+      generationConfig: {
+        temperature: cloudConfig.gemini.temperature,
+        maxOutputTokens: cloudConfig.gemini.maxTokens
+      }
+    });
+    
+    if (!isConfigValid) {
+      console.warn('PlantPal: Running in demo mode - AI features may be limited');
+    }
   }
 
   async generatePlantResponse(
